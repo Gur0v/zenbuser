@@ -1,0 +1,51 @@
+# zenbuser config - ~/.config/zenbuser/zenbuser.toml
+
+[screenshot]
+tool = "flameshot"
+args = ["gui", "-r"]
+# "stdout" or "file"
+output = "stdout"
+temp_dir = "/tmp"
+allowed_mime_types = ["image/png", "image/jpeg"]
+
+[upload]
+# Available endpoints, uncomment to switch:
+# url = "https://support.2k.com/api/v2/uploads.json"
+# url = "https://help.abc.net.au/api/v2/uploads.json"
+# url = "https://burgerking.zendesk.com/api/v2/uploads.json"
+# url = "https://ideapublicschools.zendesk.com/api/v2/uploads.json"
+# url = "https://patreon.zendesk.com/api/v2/uploads.json"
+# url = "https://planetfitness.zendesk.com/api/v2/uploads.json"
+# url = "https://support.reddithelp.com/api/v2/uploads.json"
+# url = "https://en.help.roblox.com/api/v2/uploads.json"
+# url = "https://snapchat.zendesk.com/api/v2/uploads.json"
+# url = "https://tinder.zendesk.com/api/v2/uploads.json"
+# url = "https://vimeo.zendesk.com/api/v2/uploads.json"
+url = "https://support.zendesk.com/api/v2/uploads.json"
+filename_param = "filename"
+content_type = "application/octet-stream"
+# dot-separated path into the response JSON
+response_url_path = "upload.attachments.0.mapped_content_url"
+response_error_path = "error"
+
+[filename]
+extension = "png"
+# number of random bytes used to generate the filename
+random_bytes = 12
+
+[clipboard]
+tool = "wl-copy"
+args = []
+# pipe URL via stdin instead of passing as an argument
+use_stdin = true
+
+[notification]
+tool = "notify-send"
+message = "Image URL copied to clipboard"
+args = ["-a", "zenbuser"]
+# uses the screenshot file as the notification icon
+include_screenshot_as_icon = true
+
+[cleanup]
+# remove the temp file after a successful upload
+delete_temp_file = true
