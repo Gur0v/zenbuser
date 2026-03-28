@@ -1,5 +1,3 @@
-# zenbuser config - ~/.config/zenbuser/zenbuser.toml
-
 [screenshot]
 tool = "flameshot"
 args = ["gui", "-r"]
