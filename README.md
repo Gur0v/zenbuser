@@ -1,40 +1,38 @@
 # zen(a)buser
 
-Screenshot and upload tool for Linux. Takes a screenshot, uploads it to a Zendesk-based CDN, and copies the URL to your clipboard.
+takes a screenshot, uploads it to a zendesk-based CDN, copies the URL to your clipboard.
 
-## Dependencies
+## dependencies
 
-- [flameshot](https://flameshot.org/) (or any other screenshot tool)
+- [flameshot](https://flameshot.org/) or any other screenshot tool
 - `curl`
-- `wl-copy` / `xclip` / `xsel` (clipboard)
-- `notify-send` (notifications)
-- `file` (MIME type validation)
+- `xclip` / `xsel` / `wl-copy`
+- `notify-send`
+- `file`
 
-## See it in action
-
-![preview](preview.gif)
-
-## Installation
+## installation
 
 ```sh
 cargo build --release
 cp target/release/zenbuser ~/.local/bin/
 ```
 
-## Configuration
+## usage
 
-Config lives at `~/.config/zenbuser/zenbuser.toml`. See the example config in the repo.
+```
+zenbuser [--version | -v] [--silent | -s]
+```
 
-Bind `zenbuser` to a key in your compositor/WM and you're done.
+bind it to a key in your compositor or WM and forget about it.
 
-## Disclaimer
+## configuration
 
-This tool uploads files to the public attachment endpoints of third-party support platforms (Zendesk, etc.). These endpoints are intended for customer support tickets — not as a general-purpose file host.
+config lives at `~/.config/zenbuser/zenbuser.toml`. see the example config in the repo for all options and comments.
 
-**Abusing these endpoints may get your IP blacklisted, your uploads removed, or result in other action from the platform.** Don't spam them, don't upload anything illegal, and don't use this for anything that could cause problems for the service or its users.
+## disclaimer
 
-You're responsible for how you use this. The author is not liable for bans, takedowns, or anything else that happens as a result.
+this tool uploads files to the public attachment endpoints of third-party support platforms. these aren't meant to be general-purpose file hosts, so don't spam them, don't upload anything illegal, and be reasonable about usage. your uploads may be removed at any time without notice. the author has no affiliation with zendesk or any of its customers, and is not responsible for whatever happens as a result of your use of this tool.
 
-## License
+## license
 
-This is free and unencumbered software released into the public domain. See [UNLICENSE](UNLICENSE) for details.
+public domain. see [UNLICENSE](UNLICENSE).
