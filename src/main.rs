@@ -104,11 +104,10 @@ impl Drop for TempFile {
 }
 
 fn load_config() -> Result<Config> {
-    let home = std::env::var("HOME").context("$HOME is not set")?;
-    let path = Path::new(&home).join(".config/zenbuser/zenbuser.toml");
+    let path = config_dir()?.join("zenbuser.toml");
     let contents = fs::read_to_string(&path)
-        .with_context(|| format!("Could not read config at {}", path.display()))?;
-    toml::from_str(&contents).context("Failed to parse config")
+        .with_context(|| format!("could not read config at {}", path.display()))?;
+    toml::from_str(&contents).context("failed to parse config")
 }
 
 fn validate_config(cfg: &Config) -> Result<()> {
@@ -294,6 +293,60 @@ fn send_notification(cfg: &NotificationConfig, temp_file: &Path) -> Result<()> {
     Ok(())
 }
 
+fn config_dir() -> Result<PathBuf> {
+    let home = std::env::var("HOME").context("$HOME is not set")?;
+    Ok(PathBuf::from(home).join(".config/zenbuser"))
+}
+
+fn ensure_acknowledged() -> Result<()> {
+    let dir = config_dir()?;
+    fs::create_dir_all(&dir).context("failed to create ~/.config/zenbuser")?;
+
+    let flag = dir.join(".z");
+    if flag.exists() {
+        return Ok(());
+    }
+
+    eprintln!(
+        "\n\
+        zenbuser uploads files to third-party support platform endpoints\n\
+        (zendesk and its customers). these endpoints are not intended as\n\
+        general-purpose file hosts.\n\
+        \n\
+        by continuing you confirm that:\n\
+        \n\
+          1. you are the sole person responsible for any content you upload\n\
+          2. you will not upload illegal, harmful, or infringing content\n\
+          3. you understand your uploads may be removed at any time\n\
+          4. the author of this software bears zero liability for any\n\
+             consequences arising from your use of it — including but not\n\
+             limited to IP bans, content removal, or legal action taken\n\
+             against YOU by the platform\n\
+          5. this software is provided as-is, without any warranty\n\
+        \n\
+        the author is not affiliated with zendesk, inc. or any of its\n\
+        customers in any way.\n"
+    );
+
+    eprint!("do you understand and accept these terms? [Y/n] ");
+    std::io::stderr().flush().ok();
+
+    let mut input = String::new();
+    std::io::stdin().read_line(&mut input).context("failed to read input")?;
+
+    match input.trim().to_lowercase().as_str() {
+        "y" | "yes" | "" => {
+            fs::write(&flag, "").context("failed to write acknowledgement file")?;
+            eprintln!();
+            Ok(())
+        }
+        _ => {
+            eprintln!("\nbye then.");
+            std::process::exit(0);
+        }
+    }
+}
+
 fn run(silent: bool) -> Result<()> {
     let cfg = load_config()?;
     validate_config(&cfg)?;
@@ -346,6 +399,11 @@ fn main() {
     if version {
         print_version();
         return;
+    }
+
+    if let Err(e) = ensure_acknowledged() {
+        eprintln!("Error: {:#}", e);
+        std::process::exit(1);
     }
 
     if let Err(e) = run(silent) {
