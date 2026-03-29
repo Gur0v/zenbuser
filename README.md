@@ -37,4 +37,4 @@ this tool uploads files to the public attachment endpoints of third-party suppor
 
 ## license
 
-public domain. see [UNLICENSE](UNLICENSE).
+[Apache License 2.0](LICENSE).
