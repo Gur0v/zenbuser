@@ -383,7 +383,7 @@ fn print_version() {
          See the License for the specific language governing\n\
          permissions and limitations under the License.",
         VERSION,
-        2026
+        2026-present
     );
 }
 
