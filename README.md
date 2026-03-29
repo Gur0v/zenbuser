@@ -2,6 +2,8 @@
 
 takes a screenshot, uploads it to a zendesk-based CDN, copies the URL to your clipboard.
 
+![preview](preview.gif)
+
 ## dependencies
 
 - [flameshot](https://flameshot.org/) or any other screenshot tool
