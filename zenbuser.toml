@@ -1,49 +1,87 @@
+# zenbuser configuration
+# location: ~/.config/zenbuser/zenbuser.toml
+
 [screenshot]
+# binary used to capture the screenshot
 tool = "flameshot"
+
+# arguments passed to the tool
+# flameshot gui -r streams png to stdout, no temp file needed
 args = ["gui", "-r"]
-# "stdout" or "file"
+
+# how the tool delivers its output
+#   "stdout" — tool writes image bytes to stdout (recommended)
+#   "file"   — tool writes image to a path passed as the final argument
 output = "stdout"
+
+# directory for the temporary screenshot file, must exist and be writable
 temp_dir = "/tmp"
+
+# uploads are aborted if the file mime type isn't in this list
 allowed_mime_types = ["image/png", "image/jpeg"]
 
+
 [upload]
-# url = "https://support.2k.com/api/v2/uploads.json"
-# url = "https://help.abc.net.au/api/v2/uploads.json"
-# url = "https://burgerking.zendesk.com/api/v2/uploads.json"
-# url = "https://ideapublicschools.zendesk.com/api/v2/uploads.json"
-# url = "https://patreon.zendesk.com/api/v2/uploads.json"
-# url = "https://planetfitness.zendesk.com/api/v2/uploads.json"
-# url = "https://support.reddithelp.com/api/v2/uploads.json"
-# url = "https://en.help.roblox.com/api/v2/uploads.json"
-# url = "https://snapchat.zendesk.com/api/v2/uploads.json"
-# url = "https://tinder.zendesk.com/api/v2/uploads.json"
-# url = "https://vimeo.zendesk.com/api/v2/uploads.json"
+# zendesk anonymous file upload endpoint, any zendesk help centre works
+# just swap the subdomain
 url = "https://support.zendesk.com/api/v2/uploads.json"
+# url = "https://snapchat.zendesk.com/api/v2/uploads.json"
+# url = "https://vimeo.zendesk.com/api/v2/uploads.json"
+# url = "https://tinder.zendesk.com/api/v2/uploads.json"
+# url = "https://patreon.zendesk.com/api/v2/uploads.json"
+# url = "https://en.help.roblox.com/api/v2/uploads.json"
+# url = "https://support.reddithelp.com/api/v2/uploads.json"
+# url = "https://support.2k.com/api/v2/uploads.json"
+
+# query param the endpoint uses for the filename
 filename_param = "filename"
+
+# content-type header sent with the upload, octet-stream works universally
 content_type = "application/octet-stream"
-# dot-separated path into the response JSON
+
+# dot-separated path to the url in the response json
+# zendesk response: { "upload": { "attachment": { "mapped_content_url": "..." } } }
 response_url_path = "upload.attachment.mapped_content_url"
+
+# dot-separated path to the error message in the response json
 response_error_path = "error"
 
+# seconds to wait for the upload before aborting
+timeout_secs = 30
+
+
 [filename]
+# extension appended to the randomly generated filename
 extension = "png"
-# number of random bytes used to generate the filename
+
+# number of random bytes used for the filename (hex-encoded), must be >= 8
+# 12 bytes = 24 hex characters
 random_bytes = 12
 
+
 [clipboard]
-# tool = "xclip -selection clipboard"
-tool = "wl-copy"
-args = []
-# pipe URL via stdin instead of passing as an argument
+# x11  (xclip): tool = "xclip"    args = ["-selection", "clipboard"]  use_stdin = true
+# x11  (xsel):  tool = "xsel"     args = ["--clipboard", "--input"]   use_stdin = true
+# wayland:      tool = "wl-copy"  args = []                           use_stdin = true
+tool = "xclip"
+args = ["-selection", "clipboard"]
+
+# if true, url is piped via stdin — if false, passed as a trailing argument
 use_stdin = true
+
 
 [notification]
 tool = "notify-send"
-message = "Image URL copied to clipboard"
+message = "image url copied to clipboard"
+# -a sets the app name shown in the notification
 args = ["-a", "zenbuser"]
-# uses the screenshot file as the notification icon
+
+# passes the screenshot as the notification icon (-i), requires notify-send
+# has no effect if cleanup.delete_temp_file = true
 include_screenshot_as_icon = true
 
+
 [cleanup]
-# remove the temp file after a successful upload
+# deletes the temp screenshot file after a successful upload
+# the file is always deleted on error regardless of this setting
 delete_temp_file = true
