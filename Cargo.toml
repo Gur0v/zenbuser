@@ -2,7 +2,7 @@
 name = "zenbuser"
 version = "0.1.2"
 edition = "2024"
-license = "Unlicense"
+license = "Apache-2.0"
 
 [dependencies]
 anyhow = "1"
