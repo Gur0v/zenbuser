@@ -372,11 +372,18 @@ fn print_version() {
     println!(
         "zenbuser v{}\n\
          \n\
-         This software is released into the public domain under The Unlicense.\n\
-         The author provides this software as-is, without warranty of any kind.\n\
-         The author is not responsible for any damage, data loss, or other consequences\n\
-         arising from its use. Use at your own risk.",
-        VERSION
+         Copyright (c) {} Gurov\n\
+         \n\
+         Licensed under the Apache License, Version 2.0.\n\
+         You may obtain a copy of the License at\n\
+         https://www.apache.org/licenses/LICENSE-2.0\n\
+         \n\
+         This software is distributed on an \"AS IS\" BASIS,\n\
+         WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND.\n\
+         See the License for the specific language governing\n\
+         permissions and limitations under the License.",
+        VERSION,
+        2026
     );
 }
 
